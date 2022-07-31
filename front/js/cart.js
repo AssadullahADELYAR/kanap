@@ -1,43 +1,48 @@
 let cartData = localStorage.getItem("cart");
 let cart = JSON.parse(cartData);
-console.log(cart);
 const product = document.querySelector("#cart__items");
 let totalQuantity = document.querySelector("#totalQuantity");
 let totalPrice = document.querySelector("#totalPrice");
+let heading = document.getElementById("cartHeading");
 let totalPrice1 = 0;
 let totalQuantity1 = 0;
 
 //-------------------------------- Inserting The Products ---------------------------------------//
-
-for (let productInCart of cart) {
-  console.log(productInCart);
-  let html = `
-    <article class="cart__item" data-id="${productInCart.id}" data-color="${productInCart.color}">
-        <div class="cart__item__img">
-          <img src="${productInCart.image}" alt="${productInCart.imageAlt}">
-
-        </div>
-        <div class="cart__item__content">
-            <div class="cart__item__content__description">
-              <h2>${productInCart.name}</h2>
-              <p>${productInCart.color}</p>
-              <p>${productInCart.price} €</p>
-            </div>
-            <div class="cart__item__content__settings">
-              <div class="cart__item__content__settings__quantity">
-                <p>Qté : </p>
-                <input onclick = "updateQuantity()" type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productInCart.quantity}">
+function insertProducts() {
+  if (cart == null) {
+    heading.textContent = "Your Cart is Empty";
+    return;
+  }
+  for (let productInCart of cart) {
+    console.log(productInCart);
+    let html = `
+      <article class="cart__item" data-id="${productInCart.id}" data-color="${productInCart.color}">
+          <div class="cart__item__img">
+            <img src="${productInCart.image}" alt="${productInCart.imageAlt}">
+  
+          </div>
+          <div class="cart__item__content">
+              <div class="cart__item__content__description">
+                <h2>${productInCart.name}</h2>
+                <p>${productInCart.color}</p>
+                <p>${productInCart.price} €</p>
               </div>
-              <div class="cart__item__content__settings__delete">
-                <p class="deleteItem" onclick = "removeItem(${productInCart.id},${productInCart.color})">Delete</p>
+              <div class="cart__item__content__settings">
+                <div class="cart__item__content__settings__quantity">
+                  <p>Qté : </p>
+                  <input onclick = "updateQuantity()" type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productInCart.quantity}">
+                </div>
+                <div class="cart__item__content__settings__delete">
+                  <p class="deleteItem" onclick = "removeItem(${productInCart.id},${productInCart.color})">Delete</p>
+                </div>
               </div>
-            </div>
-         </div>
-    </article>
-  `;
-  product.insertAdjacentHTML("beforeend", html);
+           </div>
+      </article>
+    `;
+    product.insertAdjacentHTML("beforeend", html);
+  }
 }
-
+insertProducts();
 function updateQuantity() {
   let currentProductId = document
     .querySelector(".cart__item")
@@ -67,6 +72,10 @@ function updateQuantity() {
 //-------------------------------- Total Price ---------------------------------------//
 
 function getTotalPrice() {
+  if (cart == null) {
+    heading.textContent = "Your Cart is Empty";
+    return;
+  }
   let total = 0;
   for (let i = 0; i < cart.length; i++) {
     total += cart[i].price * cart[i].quantity;
@@ -77,6 +86,10 @@ totalPrice.textContent = getTotalPrice();
 //-------------------------------- Total Quantity ---------------------------------------//
 
 function getTotalQuantity() {
+  if (cart == null) {
+    heading.textContent = "Your Cart is Empty";
+    return;
+  }
   let total = 0;
   for (let i = 0; i < cart.length; i++) {
     total += cart[i].quantity;
@@ -115,7 +128,7 @@ const city = document.getElementById("city");
 const email = document.getElementById("email");
 const nameRegex = /^[A-Za-z. ]{3,30}$/;
 const addressRegex = /^[a-zA-Z0-9\s,'-]*$/;
-const cityRegex = /^[a-zA-Z\s]{3,}+$/;
+const cityRegex = /^[a-zA-Z\s]+$/;
 const emailRegex = /[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-zA-Z]{2,10}$/;
 
 order.addEventListener("click", (event) => {

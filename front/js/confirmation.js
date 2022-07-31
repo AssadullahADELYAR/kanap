@@ -1,17 +1,16 @@
 function orderIdRecup() {
-  //récupération de l'url
+  //retrieve the url
   let url = new URL(window.location.href);
   let searchParams = new URLSearchParams(url.search);
-  //si "OrderID" existe = retourner la valeur
+  //if "OrderID" exists = return the value
   if (searchParams.has("orderid")) {
     let id = searchParams.get("orderid");
     return id;
-    //Sinon message d'erreur
   } else {
     console.log("Error, no order Id found");
   }
 }
-//Affichage de OrderID au chargement de la page
+// Display OrderID on page load
 window.addEventListener("load", () => {
   const orderId = document.getElementById("orderId");
   orderId.innerText = orderIdRecup();
