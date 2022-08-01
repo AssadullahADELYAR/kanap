@@ -9,8 +9,9 @@ let totalQuantity1 = 0;
 
 //-------------------------------- Inserting The Products ---------------------------------------//
 function insertProducts() {
-  if (cart == null) {
+  if (cart == null || cart.length == 0) {
     heading.textContent = "Your Cart is Empty";
+    localStorage.clear();
     return;
   }
   for (let productInCart of cart) {
@@ -30,10 +31,10 @@ function insertProducts() {
               <div class="cart__item__content__settings">
                 <div class="cart__item__content__settings__quantity">
                   <p>Qté : </p>
-                  <input onclick = "updateQuantity()" type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productInCart.quantity}">
+                  <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productInCart.quantity}">
                 </div>
                 <div class="cart__item__content__settings__delete">
-                  <p class="deleteItem" onclick = "removeItem(${productInCart.id},${productInCart.color})">Delete</p>
+                  <p data-id="${productInCart.id}" data-color="${productInCart.color} class="deleteItem">Delete</p>
                 </div>
               </div>
            </div>
@@ -43,31 +44,6 @@ function insertProducts() {
   }
 }
 insertProducts();
-function updateQuantity() {
-  let currentProductId = document
-    .querySelector(".cart__item")
-    .getAttribute("data-id");
-  let currentProductColor = document
-    .querySelector(".cart__item")
-    .getAttribute("data-color");
-  let find = [];
-  console.log("empty find array");
-  console.log(find);
-  find = cart.filter(function (ele) {
-    return ele.id == currentProductId && ele.color == currentProductColor;
-  });
-  if (find.length > 0) {
-    if (
-      find[0].id == currentProductId &&
-      find[0].color == currentProductColor
-    ) {
-      find[0].quantity++;
-      // localStorage.setItem("cart", JSON.stringify(cart));
-      console.log(find[0].quantity, find[0].color, find[0].id);
-    }
-  }
-}
-// updateQuantity();
 
 //-------------------------------- Total Price ---------------------------------------//
 
@@ -97,25 +73,44 @@ function getTotalQuantity() {
   return total;
 }
 totalQuantity.textContent = getTotalQuantity();
-
-//-------------------------------- Remove Item ---------------------------------------//
-let singleProductId = document.querySelector(".cart__item").dataset.id;
-let singleProductColor = document.querySelector(".cart__item").dataset.color;
-console.log(singleProductId);
-console.log(singleProductColor);
-let deleteItem = document.querySelector(".deleteItem");
-console.log(deleteItem);
-deleteItem.addEventListener("click", () => {
-  deleteItem.closest("article").remove();
+//-------------------------------- Update Quantity ---------------------------------------//
+let itemQuantity = document.querySelector(".itemQuantity");
+itemQuantity.addEventListener("change", () => {
+  updateQuantity(singleProductId, singleProductColor);
+  location.reload();
 });
-function removeItem(id, color) {
+
+function updateQuantity(id, color) {
   for (let i = 0; i < cart.length; i++) {
     if (cart[i].id == id && cart[i].color == color) {
-      cart.splice(i, 1);
-      localStorage.removeItem(cart[i]);
+      cart[i].quantity = parseInt(itemQuantity.value);
+      localStorage.setItem("cart", JSON.stringify(cart));
     }
-    return;
   }
+}
+//-------------------------------- Remove Item ---------------------------------------//
+
+document.querySelectorAll(".deleteItem").forEach((item) => {
+  item.addEventListener("click", (e) => {
+    // Obtaine item id and color used for finding specific item
+
+    const itemID = e.target.attributes[0].textContent;
+    const itemColor = e.target.attributes[1].textContent;
+
+    // Remove item
+    removeItem(itemID, itemColor);
+  });
+});
+
+function removeItem(itemID, itemColor) {
+  //Filter out item to be removed
+  let newCart = cart.filter((item) => {
+    return item.id !== itemID && item.color !== itemColor;
+  });
+
+  localStorage.removeItem("cart"); //Remove previous cart
+  localStorage.setItem("cart", JSON.stringify(newCart)); //Set new cart
+  window.location.reload(); // Reloade page
 }
 
 //-------------------------------- Form Validation ---------------------------------------//
