@@ -34,7 +34,7 @@ function insertProducts() {
                   <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productInCart.quantity}">
                 </div>
                 <div class="cart__item__content__settings__delete">
-                  <p data-id="${productInCart.id}" data-color="${productInCart.color} class="deleteItem">Delete</p>
+                  <p  class="deleteItem">Delete</p>
                 </div>
               </div>
            </div>
@@ -44,7 +44,7 @@ function insertProducts() {
   }
 }
 insertProducts();
-
+// data-id="${productInCart.id}" data-color="${productInCart.color}
 //-------------------------------- Total Price ---------------------------------------//
 
 function getTotalPrice() {
@@ -74,44 +74,74 @@ function getTotalQuantity() {
 }
 totalQuantity.textContent = getTotalQuantity();
 //-------------------------------- Update Quantity ---------------------------------------//
-let itemQuantity = document.querySelector(".itemQuantity");
-itemQuantity.addEventListener("change", () => {
-  updateQuantity(singleProductId, singleProductColor);
-  location.reload();
-});
 
-function updateQuantity(id, color) {
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i].id == id && cart[i].color == color) {
-      cart[i].quantity = parseInt(itemQuantity.value);
+function updateQuantity() {
+  let itemQuantity = document.querySelectorAll(".itemQuantity");
+
+  for (let i = 0; i < itemQuantity.length; i++) {
+    itemQuantity[i].addEventListener("change", (event) => {
+      //Preventing the default behavior button
+      event.preventDefault();
+      //Storing the new value
+      let updatedValue = parseInt(itemQuantity[i].value);
+      cart[i].quantity = updatedValue;
+      //Setting localStorage to cart array
       localStorage.setItem("cart", JSON.stringify(cart));
-    }
+      location.reload();
+    });
   }
 }
+updateQuantity();
+
 //-------------------------------- Remove Item ---------------------------------------//
+let deleteProduct = document.querySelectorAll(".deleteItem");
 
-document.querySelectorAll(".deleteItem").forEach((item) => {
-  item.addEventListener("click", (e) => {
-    // Obtaine item id and color used for finding specific item
+/* boucle qui parcourt le panier */
+for (let i = 0; i < deleteProduct.length; i++) {
+  deleteProduct[i].addEventListener("click", (event) => {
+    event.preventDefault();
 
-    const itemID = e.target.attributes[0].textContent;
-    const itemColor = e.target.attributes[1].textContent;
+    //Getting ID and Color value from cart array on click event
+    let singleProductColor = cart[i].color;
+    let singleProductId = cart[i].id;
 
-    // Remove item
-    removeItem(itemID, itemColor);
+    //keep only the elements that do not meet the conditions
+    cart = cart.filter(
+      (el) => el.id !== singleProductId || el.color !== singleProductColor
+    );
+
+    //Setting back localStorage to cart array
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    //If cart array is empty remove it from localStorage
+    if (cart == "[]" || cart.length == 0) {
+      localStorage.removeItem("cart");
+    }
+    window.location.href = "cart.html";
   });
-});
-
-function removeItem(itemID, itemColor) {
-  //Filter out item to be removed
-  let newCart = cart.filter((item) => {
-    return item.id !== itemID && item.color !== itemColor;
-  });
-
-  localStorage.removeItem("cart"); //Remove previous cart
-  localStorage.setItem("cart", JSON.stringify(newCart)); //Set new cart
-  window.location.reload(); // Reloade page
 }
+// document.querySelectorAll(".deleteItem").forEach((item) => {
+//   item.addEventListener("click", (e) => {
+//     // Obtaine item id and color used for finding specific item
+
+//     const itemID = e.target.attributes[0].textContent;
+//     const itemColor = e.target.attributes[1].textContent;
+
+//     // Remove item
+//     removeItem(itemID, itemColor);
+//   });
+// });
+
+// function removeItem(itemID, itemColor) {
+//   //Filter out item to be removed
+//   let newCart = cart.filter((item) => {
+//     return item.id !== itemID && item.color !== itemColor;
+//   });
+
+//   localStorage.removeItem("cart"); //Remove previous cart
+//   localStorage.setItem("cart", JSON.stringify(newCart)); //Set new cart
+//   window.location.reload(); // Reloade page
+// }
 
 //-------------------------------- Form Validation ---------------------------------------//
 
