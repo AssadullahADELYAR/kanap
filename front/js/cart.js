@@ -4,16 +4,18 @@ const product = document.querySelector("#cart__items");
 let totalQuantity = document.querySelector("#totalQuantity");
 let totalPrice = document.querySelector("#totalPrice");
 let heading = document.getElementById("cartHeading");
-let totalPrice1 = 0;
-let totalQuantity1 = 0;
 
 //-------------------------------- Inserting The Products ---------------------------------------//
+
+//Check if localStorage is empty
 function insertProducts() {
   if (cart == null || cart.length == 0) {
     heading.textContent = "Your Cart is Empty";
     localStorage.clear();
     return;
   }
+
+  //Load the products from localStorage
   for (let productInCart of cart) {
     console.log(productInCart);
     let html = `
@@ -44,35 +46,38 @@ function insertProducts() {
   }
 }
 insertProducts();
-// data-id="${productInCart.id}" data-color="${productInCart.color}
+
 //-------------------------------- Total Price ---------------------------------------//
 
 function getTotalPrice() {
-  if (cart == null) {
-    heading.textContent = "Your Cart is Empty";
-    return;
-  }
   let total = 0;
-  for (let i = 0; i < cart.length; i++) {
-    total += cart[i].price * cart[i].quantity;
+  if (cart == null) {
+    return total;
+  } else {
+    for (let i = 0; i < cart.length; i++) {
+      total += cart[i].price * cart[i].quantity;
+    }
+    return total;
   }
-  return total;
 }
 totalPrice.textContent = getTotalPrice();
+
 //-------------------------------- Total Quantity ---------------------------------------//
 
 function getTotalQuantity() {
-  if (cart == null) {
-    heading.textContent = "Your Cart is Empty";
-    return;
-  }
   let total = 0;
-  for (let i = 0; i < cart.length; i++) {
-    total += cart[i].quantity;
+
+  if (cart == null) {
+    return total;
+  } else {
+    for (let i = 0; i < cart.length; i++) {
+      total += cart[i].quantity;
+    }
+    return total;
   }
-  return total;
 }
 totalQuantity.textContent = getTotalQuantity();
+
 //-------------------------------- Update Quantity ---------------------------------------//
 
 function updateQuantity() {
@@ -80,11 +85,13 @@ function updateQuantity() {
 
   for (let i = 0; i < itemQuantity.length; i++) {
     itemQuantity[i].addEventListener("change", (event) => {
-      //Preventing the default behavior button
+      //Preventing the default behavior of button
       event.preventDefault();
+
       //Storing the new value
       let updatedValue = parseInt(itemQuantity[i].value);
       cart[i].quantity = updatedValue;
+
       //Setting localStorage to cart array
       localStorage.setItem("cart", JSON.stringify(cart));
       location.reload();
@@ -120,47 +127,30 @@ for (let i = 0; i < deleteProduct.length; i++) {
     window.location.href = "cart.html";
   });
 }
-// document.querySelectorAll(".deleteItem").forEach((item) => {
-//   item.addEventListener("click", (e) => {
-//     // Obtaine item id and color used for finding specific item
-
-//     const itemID = e.target.attributes[0].textContent;
-//     const itemColor = e.target.attributes[1].textContent;
-
-//     // Remove item
-//     removeItem(itemID, itemColor);
-//   });
-// });
-
-// function removeItem(itemID, itemColor) {
-//   //Filter out item to be removed
-//   let newCart = cart.filter((item) => {
-//     return item.id !== itemID && item.color !== itemColor;
-//   });
-
-//   localStorage.removeItem("cart"); //Remove previous cart
-//   localStorage.setItem("cart", JSON.stringify(newCart)); //Set new cart
-//   window.location.reload(); // Reloade page
-// }
 
 //-------------------------------- Form Validation ---------------------------------------//
 
+//Getting form elements from DOM
 const order = document.getElementById("order");
 const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const address = document.getElementById("address");
 const city = document.getElementById("city");
 const email = document.getElementById("email");
+
+//Creating regular expression
 const nameRegex = /^[A-Za-z. ]{3,30}$/;
 const addressRegex = /^[a-zA-Z0-9\s,'-]*$/;
 const cityRegex = /^[a-zA-Z\s]+$/;
 const emailRegex = /[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-zA-Z]{2,10}$/;
 
+//Order button event listener function
 order.addEventListener("click", (event) => {
   event.preventDefault();
   formValidation();
 });
 
+//Checking form data
 function formValidation() {
   if (firstName.value == "" || nameRegex.test(firstName.value) == false) {
     document.getElementById("firstNameErrorMsg").textContent =
@@ -221,6 +211,7 @@ function formValidation() {
     body: JSON.stringify(orderInfo),
   };
 
+  //Post the order information
   fetch("http://localhost:3000/api/products/order", orderData)
     .then((response) => response.json())
     .then((data) => {

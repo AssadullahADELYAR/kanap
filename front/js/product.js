@@ -9,7 +9,7 @@ let orderButton = document.getElementById("addToCart");
 const params = new URLSearchParams(window.location.search);
 const productId = params.get("id");
 
-//-------------------------------- Getting and add the product---------------------------------------//
+//-------------------------------- Getting and adding the product---------------------------------------//
 
 fetch(`http://localhost:3000/api/products/${productId}`)
   .then(function (response) {
@@ -48,18 +48,20 @@ orderButton.addEventListener("click", function () {
     return;
   }
   //-------------------------------- Checking if LocalStorage ---------------------------------------//
+  //Creating product object
+  let product = {
+    id: productId,
+    color: productColor,
+    quantity: productQuantity,
+    name: productName.textContent,
+    price: productPrice.textContent,
+    image: productImgSrc,
+    imageAlt: productImgAlt,
+    // description: productDescription.textContent,
+  };
   // if it's empty add the product to cart array
   if (cart.length == 0) {
-    cart.push({
-      id: productId,
-      color: productColor,
-      quantity: productQuantity,
-      name: productName.textContent,
-      price: productPrice.textContent,
-      image: productImgSrc,
-      imageAlt: productImgAlt,
-      description: productDescription.textContent,
-    });
+    cart.push(product);
     //Add cart array to localstorage
     localStorage.setItem("cart", JSON.stringify(cart));
   } else {
@@ -76,16 +78,7 @@ orderButton.addEventListener("click", function () {
       }
     } else {
       //Else it is a new product add to cart
-      cart.push({
-        id: productId,
-        color: productColor,
-        quantity: productQuantity,
-        name: productName.textContent,
-        price: productPrice.textContent,
-        image: productImgSrc,
-        imageAlt: productImgAlt,
-        description: productDescription.textContent,
-      });
+      cart.push(product);
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }
