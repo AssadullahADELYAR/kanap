@@ -1,4 +1,4 @@
-function orderIdRecup() {
+function getProductId() {
   //retrieve the url
   let url = new URL(window.location.href);
   let searchParams = new URLSearchParams(url.search);
@@ -13,5 +13,5 @@ function orderIdRecup() {
 // Display OrderID on page load
 window.addEventListener("load", () => {
   const orderId = document.getElementById("orderId");
-  orderId.innerText = orderIdRecup();
+  orderId.innerText = getProductId();
 });
