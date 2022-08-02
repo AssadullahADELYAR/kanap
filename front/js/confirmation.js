@@ -15,3 +15,19 @@ window.addEventListener("load", () => {
   const orderId = document.getElementById("orderId");
   orderId.innerText = getProductId();
 });
+
+//-------------------------------- Display Product Quantity in Navigation ---------------------------------------//
+
+function showItemInCart() {
+  let totalItem = 0;
+  if (cart == null) {
+    return;
+  } else {
+    for (let i = 0; i < cart.length; i++) {
+      totalItem += cart[i].quantity;
+    }
+    document.getElementById("itemInCart").textContent = ` ${totalItem}`;
+  }
+}
+
+showItemInCart();
