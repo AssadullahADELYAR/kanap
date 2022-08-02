@@ -82,5 +82,37 @@ orderButton.addEventListener("click", function () {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }
+  // document.getElementById("productAdded").textContent = "Product Added to cart";
+  overlayOn();
+  showItemInCart();
+
   // window.location.href = "./cart.html";
 });
+
+//-------------------------------- Display Overlay ---------------------------------------//
+
+function overlayOn() {
+  document.getElementById("overlay").style.display = "block";
+}
+
+//-------------------------------- Hide Overlay ---------------------------------------//
+
+function overlayOff() {
+  document.getElementById("overlay").style.display = "none";
+}
+
+//-------------------------------- Display Product Quantity in Navigation ---------------------------------------//
+
+function showItemInCart() {
+  let totalItem = 0;
+  if (cart == null) {
+    return;
+  } else {
+    for (let i = 0; i < cart.length; i++) {
+      totalItem += cart[i].quantity;
+    }
+    document.getElementById("itemInCart").textContent = ` ${totalItem}`;
+  }
+}
+
+showItemInCart();

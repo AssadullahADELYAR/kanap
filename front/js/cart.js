@@ -12,6 +12,9 @@ function insertProducts() {
   if (cart == null || cart.length == 0) {
     heading.textContent = "Your Cart is Empty";
     localStorage.clear();
+    document.querySelector(".cart__order").classList.add("hide_form");
+    document.getElementById("order").disabled = true;
+
     return;
   }
 
@@ -72,6 +75,7 @@ function getTotalQuantity() {
   } else {
     for (let i = 0; i < cart.length; i++) {
       total += cart[i].quantity;
+      document.getElementById("itemInCart").textContent = ` ${total}`;
     }
     return total;
   }

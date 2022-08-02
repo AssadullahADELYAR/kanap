@@ -31,3 +31,23 @@ function products(data) {
     product.insertAdjacentHTML("beforeend", html);
   }
 }
+
+//-------------------------------- Display Product Quantity in Navigation ---------------------------------------//
+
+let myStorage = localStorage.getItem("cart");
+let storage = JSON.parse(myStorage);
+const cart = storage || [];
+
+function showItemInCart() {
+  let totalItem = 0;
+  if (cart == null) {
+    return;
+  } else {
+    for (let i = 0; i < cart.length; i++) {
+      totalItem += cart[i].quantity;
+    }
+    document.getElementById("itemInCart").textContent = ` ${totalItem}`;
+  }
+}
+
+showItemInCart();
