@@ -90,7 +90,7 @@ function updateQuantity() {
   for (let i = 0; i < itemQuantity.length; i++) {
     itemQuantity[i].addEventListener("change", (event) => {
       //Preventing the default behavior of button
-      event.preventDefault();
+      // event.preventDefault();
 
       //Storing the new value
       let updatedValue = parseInt(itemQuantity[i].value);
@@ -105,6 +105,7 @@ function updateQuantity() {
 updateQuantity();
 
 //-------------------------------- Remove Item ---------------------------------------//
+
 let deleteProduct = document.querySelectorAll(".deleteItem");
 
 /* boucle qui parcourt le panier */

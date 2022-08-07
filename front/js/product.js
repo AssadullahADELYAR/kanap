@@ -47,7 +47,9 @@ orderButton.addEventListener("click", function () {
     alert("Please Select a Color and Choose Quantity between 1 to 100");
     return;
   }
+
   //-------------------------------- Checking if LocalStorage ---------------------------------------//
+
   //Creating product object
   let product = {
     id: productId,
@@ -59,9 +61,11 @@ orderButton.addEventListener("click", function () {
     imageAlt: productImgAlt,
     // description: productDescription.textContent,
   };
+
   // if it's empty add the product to cart array
   if (cart.length == 0) {
     cart.push(product);
+
     //Add cart array to localstorage
     localStorage.setItem("cart", JSON.stringify(cart));
   } else {
@@ -70,6 +74,7 @@ orderButton.addEventListener("click", function () {
     find = cart.filter(function (ele) {
       return ele.id == productId && ele.color == productColor;
     });
+
     //if yes update the quantity
     if (find.length > 0) {
       if (find[0].id == productId && find[0].color == productColor) {
@@ -82,11 +87,12 @@ orderButton.addEventListener("click", function () {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }
-  // document.getElementById("productAdded").textContent = "Product Added to cart";
-  overlayOn();
-  showItemInCart();
 
-  // window.location.href = "./cart.html";
+  //Call the overlay function
+  overlayOn();
+
+  //Call showItemInCart function
+  showItemInCart();
 });
 
 //-------------------------------- Display Overlay ---------------------------------------//
