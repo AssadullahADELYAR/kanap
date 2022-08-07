@@ -58,10 +58,13 @@
           </a>
           <nav>
             <ul>
-              <a href="./index.html"><li>Home</li></a>
-              <a href="./cart.html"
-                ><li>Cart <span id="itemInCart"> 0 </span></li></a
-              >
+              <li><a href="./index.html">Home</a></li>
+              <li>
+                <a href="./cart.html">Cart</a>
+              </li>
+              <li>
+                <span id="itemInCart"> 0 </span>
+              </li>
             </ul>
           </nav>
         </div>
@@ -75,7 +78,7 @@
     </div>
     <main class="limitedWidthBlockContainer">
       <div class="limitedWidthBlock">
-        <section class="item">
+        <div class="item">
           <article>
             <div class="item__img">
               <!-- <img src="../images/logo.png" alt="Photographie d'un canapé"> -->
@@ -97,7 +100,7 @@
 
               <div class="item__content__settings">
                 <div class="item__content__settings__color">
-                  <label for="color-select">Chose your color:</label>
+                  <label for="colors">Chose your color:</label>
                   <select name="color-select" id="colors">
                     <option value="">--Please, select a color --</option>
                     <!--                       <option value="vert">vert</option>
@@ -106,7 +109,7 @@
                 </div>
 
                 <div class="item__content__settings__quantity">
-                  <label for="itemQuantity">Number of articles (1-100):</label>
+                  <label for="quantity">Number of articles (1-100):</label>
                   <input
                     type="number"
                     name="itemQuantity"
@@ -123,7 +126,7 @@
               </div>
             </div>
           </article>
-        </section>
+        </div>
       </div>
     </main>
 
